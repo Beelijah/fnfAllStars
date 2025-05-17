@@ -1,0 +1,63 @@
+import funkin.play.song.Song;
+import funkin.play.PlayState;
+import funkin.Paths;
+import funkin.play.cutscene.VideoCutscene;
+import flixel.util.FlxTimer;
+
+class UghSong extends Song {
+  var hasPlayedCutscene:Bool = false;
+  var videoPlaying:Bool = false;
+
+  public function new() {
+    super('ugh');
+  }
+
+  override public function onCreate(event:ScriptEvent):Void
+  {
+    super.onCreate(event);
+    trace('UghSong: onCreate() called');
+    if (!hasPlayedCutscene) {
+      playMyVideo();
+      hasPlayedCutscene = true;
+      videoPlaying = true;
+    }
+  }
+
+  function playMyVideo() {
+    trace('UghSong: Attempting to play video using VideoCutscene');
+    var videoPath = 'assets/videos/videos/ughCutscene.mp4'; // Correct path
+    trace('Video path:', videoPath);
+    VideoCutscene.play(videoPath);
+    #if html5
+    trace('HTML5: FlxVideo instance created in VideoCutscene');
+    #end
+  }
+
+  override public function start(fromState:PlayState = null, ?__o__:Dynamic):Void
+  {
+    if (!videoPlaying) {
+      super.start(fromState, __o__);
+    } else {
+      trace('UghSong: Delaying song start due to video playback');
+      new FlxTimer().start(5, function(tmr) {
+        videoPlaying = false;
+        super.start(fromState, __o__);
+        trace('UghSong: Song start triggered after delay');
+      });
+    }
+  }
+
+  function onSongRetry(event:ScriptEvent)
+  {
+    super.onSongRetry(event);
+    hasPlayedCutscene = false;
+    videoPlaying = false;
+  }
+
+  function onDestroy(event:ScriptEvent)
+  {
+    super.onDestroy(event);
+    hasPlayedCutscene = false;
+    videoPlaying = false;
+    }
+}
