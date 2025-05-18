@@ -5,15 +5,22 @@
     "normal": 2.9,
     "hard": 2.9
   },
-  "events": [
-    {
+  "events": [{
+      "t": 0,
+      "e": "ZoomCamera",
+      "v": {
+	"duration": 8,
+	"ease": "linear",
+	"zoom": 0.1,
+	"mode": "stage"
+  }
+    },{
       "t": 3200,
       "e": "FocusCamera",
       "v": {
 	"char": 0
 }
-    }
-  ],
+  }],
   "notes": {
     "normal": [
       {
